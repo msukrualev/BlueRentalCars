@@ -1,5 +1,14 @@
 - name: ping them all
-  hosts: all
+  hosts: all 
+  gather_facts: False
   tasks:
+    - name: Dinamik envanter dosyasini guncelle
+      copy:
+        content: |
+          [all]
+          {% for host in ec2_facts.instances %}
+          {{ host.tags.Name }}  ansible_host={{ host.public_dns_name }}
+          {% endfor %}
+        dest: dynamic_inventory_aws_ec2.ini
     - name: pinging
-      ping:
+        ping:
