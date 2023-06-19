@@ -11,4 +11,4 @@
           {% endfor %}
         dest: dynamic_inventory_aws_ec2.ini
     - name: pinging
-        ping:
+      ping:
