@@ -2,6 +2,12 @@
   hosts: all 
   gather_facts: False
   tasks:
+    - name: EC2 örneklerinin IP adreslerini al
+      ec2_instance_facts:
+        aws_access_key: AKIA4KE7HUSTW6KUNI7L
+        aws_secret_key: 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
+        region: us-east-1
+      register: ec2_facts
     - name: Dinamik envanter dosyasini guncelle
       copy:
         content: |
