@@ -13,7 +13,7 @@ pipeline {
         stage('Create Infrastructure') {
             steps {
                 echo 'Creating Infrastructure for Automation Environment with Cloudfomation'
-                sh "aws cloudformation deploy --template-file ./infrastructure/cfn-template.yaml --stack-name ${APP_STACK_NAME} --parameter-overrides KeyPairName=${CFN_KEY} --capabilities CAPABILITY_IAM"
+                sh "aws cloudformation deploy --template-file ./Infrastructure/cfn-template.yaml --stack-name ${APP_STACK_NAME} --parameter-overrides KeyPairName=${CFN_KEY} --capabilities CAPABILITY_IAM"
                 
             }
         }
