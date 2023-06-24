@@ -1,0 +1,62 @@
+pipeline {
+    agent any
+    environment {
+        
+        APP_NAME="car-rental"
+        APP_STACK_NAME="car-rental-App-ver-2"
+        APP_REPO_NAME="techpro"
+        AWS_ACCOUNT_ID=sh(script:'export PATH="$PATH:/usr/local/bin" && aws sts get-caller-identity --query Account --output text', returnStdout:true).trim()
+        AWS_REGION="us-east-1"
+        ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+        CFN_KEY="brc-cfn"
+        ANSIBLE_PRIVATE_KEY_FILE="${JENKINS_HOME}/.ssh/${CFN_KEY}"
+        ANSIBLE_HOST_KEY_CHECKING="False"
+    }
+    stages {
+        stage('Prepare Tags for Docker Images') {
+            steps {
+                echo 'Preparing Tags for Docker Images'
+                script {
+                    env.IMAGE_TAG_FE="${ECR_REGISTRY}/${APP_REPO_NAME}:frontend-ver-${BUILD_NUMBER}"
+                    env.IMAGE_TAG_BE="${ECR_REGISTRY}/${APP_REPO_NAME}:backend-ver-${BUILD_NUMBER}"
+                }
+            }
+        }
+        stage('Build App Docker Images') {
+            steps {
+                echo 'Building App Dev Images'
+                sh """
+                  docker build --force-rm -t "${IMAGE_TAG_FE}" "${WORKSPACE}/bluerentalcars-frontend"
+                  docker build --force-rm -t "${IMAGE_TAG_BE}" "${WORKSPACE}/bluerentalcars-backend"
+                  docker image ls
+                """
+            }
+        }
+        stage('Push Images to ECR Repo') {
+            steps {
+                echo "Pushing ${APP_NAME} App Images to ECR Repo"
+                sh """
+                  aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY} 
+                  docker push "${IMAGE_TAG_FE}"
+                  docker push "${IMAGE_TAG_BE}"
+                """
+             }
+        }
+        stage('Deploy App on Docker Swarm'){
+            steps {
+                echo 'Deploying App on Swarm'
+                sh """
+                  sed -i "s/APP_STACK_NAME/${APP_STACK_NAME}/" ./ansible/inventory/dynamic_inventory_aws_ec2.yaml
+                  envsubst < docker-compose-swarm.yaml > docker-compose-swarm-tagged.yaml
+                  ansible-playbook -i ./ansible/inventory/dynamic_inventory_aws_ec2.yaml -b --extra-vars "workspace=${WORKSPACE} app_name=${APP_NAME} aws_region=${AWS_REGION} ecr_registry=${ECR_REGISTRY}" ./ansible/playbooks/deploy_app_on_cluster.yaml
+                """
+            }
+        }
+    }
+    post {
+        always {
+            echo 'Deleting all local images'
+            sh 'docker image prune -af'
+        }
+    }
+}
