@@ -4,7 +4,7 @@ pipeline {
         
         APP_NAME="car-rental"
         APP_STACK_NAME="brc-app-prod"
-        APP_REPO_NAME="techpro-brc"
+        APP_REPO_NAME="techpro-brc"   
         AWS_ACCOUNT_ID=sh(script:'export PATH="$PATH:/usr/local/bin" && aws sts get-caller-identity --query Account --output text', returnStdout:true).trim()
         AWS_REGION="us-east-1"
         ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
