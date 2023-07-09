@@ -14,7 +14,7 @@ RUN npm install
 # Copy the entire project to the working directory
 COPY . .
 
-# update browserlist
+# update browserlist database
 RUN npx browserslist@latest --update-db
 
 # Build the React app
