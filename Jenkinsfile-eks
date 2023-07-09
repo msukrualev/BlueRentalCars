@@ -11,12 +11,6 @@ pipeline {
         
     }
 stages {
-        stage('Update Browserslist') {
-            steps {
-                sh 'npx browserslist@latest --update-db'
-            }
-        }
-
         stage('Prepare Tags for Docker Images') {
             steps {
                 echo 'Preparing Tags for Docker Images'
