@@ -12,7 +12,7 @@ metadata:
     io.kompose.service: ui
   name: ui
 spec:
-  rules:
+  rules: 
     - host: carrental.msukrualev.link
       http:
         paths:
