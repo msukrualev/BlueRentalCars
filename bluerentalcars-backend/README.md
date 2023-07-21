@@ -38,5 +38,5 @@ The Car Management API implements a complex domain model flow to rental a car. T
 #### NOTE: All method except signup/login/visitors methods, needs Authorization Bearer token in header 
 
 ### For Backend env. variables in src/main/resources/application.yaml
- ## For Frontend env. variables in root directory  .env
+ ## For Frontend env. variables in root directory:  .env
 
