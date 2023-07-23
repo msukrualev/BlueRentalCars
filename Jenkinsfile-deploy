@@ -2,13 +2,13 @@ pipeline {
     agent any
     environment {
         
-        APP_NAME="car-rental"
-        APP_STACK_NAME="car-rental-App-ver-2"
-        APP_REPO_NAME="techpro-brc"
+        APP_NAME="blue-rental-car"
+        APP_STACK_NAME="$APP_NAME-App-4"
+        APP_REPO_NAME="msukrualev"
         AWS_ACCOUNT_ID=sh(script:'export PATH="$PATH:/usr/local/bin" && aws sts get-caller-identity --query Account --output text', returnStdout:true).trim()
         AWS_REGION="us-east-1"
         ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
-        CFN_KEY="brc-cfn"
+        CFN_KEY="msukrualev-key"
         ANSIBLE_PRIVATE_KEY_FILE="${JENKINS_HOME}/.ssh/${CFN_KEY}"
         ANSIBLE_HOST_KEY_CHECKING="False"
     }
