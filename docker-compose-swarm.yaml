@@ -20,7 +20,7 @@ services:
     networks:
       - carrental-net
   app:
-    image: "${IMAGE_TAG_BE}"
+    image: "msukrualev/backend:2023"
     deploy:
       replicas: 3
       update_config:
