@@ -16,7 +16,7 @@ services:
     ports:
       - "80:3000"
     environment: 
-      - APP_URL=http://3.88.185.250:8080/car-rental/api/
+      - APP_URL=http://18.208.221.175:8080/car-rental/api/
     networks:
       - carrental-net
   app:
