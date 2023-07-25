@@ -13,7 +13,7 @@ metadata:
   name: ui
 spec:
   rules: 
-    - host: carrentals.msukrualev.link
+    - host: carrental.msukrualev.link
       http:
         paths:
           - backend:
@@ -23,7 +23,7 @@ spec:
                   number: 80
             path: /
             pathType: Prefix
-    - host: prometheus.msukrualev.link
+    - host: pro.msukrualev.link
       http:
         paths:
           - backend:
@@ -33,7 +33,7 @@ spec:
                   number: 9090
             path: /
             pathType: Prefix        
-    - host: grafana.msukrualev.link
+    - host: gra.msukrualev.link
       http:
         paths:
           - backend:
